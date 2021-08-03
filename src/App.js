@@ -5,15 +5,38 @@ import Filter from './components/Filter';
 import ContactList from './components/ContactList';
 class App extends Component {
   state = {
-    contacts: [
-    {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
-    {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
-    {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
-    {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
-    ],
+    contacts: [],
     filter: '',
-  }  
+  }
+  
+  //  contacts: [
+  //   {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
+  //   {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
+  //   {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
+  //   {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
  
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+    console.log(parsedContacts)
+    console.log(contacts)
+
+    if (parsedContacts) {
+      console.log('parsedContacts', parsedContacts)
+      this.setState({ contacts: parsedContacts });
+    }    
+  }
+  
+ componentDidUpdate(prevProps, prevState) {
+    const nextContacts = this.state.contacts;
+    const prevContacts = prevState.contacts;
+
+    if (nextContacts !== prevContacts) {
+      console.log('Обновилось поле contacts, записываю todos в хранилище');
+      localStorage.setItem('contacts', JSON.stringify(nextContacts));
+    }
+  }
+  
   formSubmitHandler = (text) => {
     // console.log('text:', text)
     const contactsId = uuidv4();
